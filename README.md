@@ -2,7 +2,7 @@
 
 An end-to-end **product analytics** case study evaluating whether a simplified virtual-card application flow improves completion conversion.
 
-> **Project status:** In development. This repository uses synthetic data for educational purposes. It contains no real customer or company data, and its results must not be interpreted as evidence about a real fintech product.
+> **Project status:** Analysis notebook and supporting files are uploaded to the feature branch for review. The project uses synthetic educational data only. It contains no real customer or company data, and its results must not be interpreted as evidence about a real fintech product.
 
 ## Business Problem
 
@@ -13,81 +13,99 @@ A fintech product team is considering removing an optional step from its virtual
 - **Control (A):** current application flow.
 - **Treatment (B):** simplified application flow.
 - **Unit of randomization:** user.
-- **Primary metric:** application completion conversion rate.
+- **Primary metric:** application completion conversion rate among all randomized users.
 - **Guardrail metrics:** application error rate and completion time among users who complete the application.
 
-## Hypotheses
+## Hypotheses and planning assumptions
 
-Let \(p_A\) and \(p_B\) denote the application completion rates in groups A and B.
+Let `p_A` and `p_B` denote application completion rates in groups A and B.
 
-- **Null hypothesis (H₀):** \(p_A = p_B\).
-- **Alternative hypothesis (H₁):** \(p_A \ne p_B\).
+- **Null hypothesis (H₀):** `p_A = p_B`.
+- **Alternative hypothesis (H₁):** `p_A != p_B`.
 - **Significance level:** 5%, two-sided.
 - **Target statistical power:** 80%.
-- **Planning baseline:** 30% conversion in the control group.
+- **Planning baseline:** 30% control conversion.
 - **Minimum detectable effect (MDE):** +2 percentage points absolute.
 
-These values are planning assumptions. They will be reviewed as part of the analysis; they are not observed business results.
+These are explicitly stated planning assumptions, not observed business facts. The notebook calculates the sample size from these assumptions and generates a reproducible synthetic dataset.
 
-## Planned Methodology
+## Analysis workflow
 
-1. Define the experiment, primary metric, guardrails, and hypotheses.
-2. Estimate the required sample size based on the baseline conversion, MDE, significance level, and target power.
-3. Generate reproducible synthetic user-level experiment data.
-4. Validate data quality, group allocation, and key assumptions.
-5. Calculate conversion rates, absolute lift, and relative lift.
-6. Apply a two-proportion z-test and Pearson chi-square test.
-7. Estimate uncertainty using confidence intervals and bootstrap resampling.
-8. Review guardrail metrics.
-9. Translate the statistical results into a product recommendation, including limitations and next steps.
+The notebook `notebooks/ab_test_analysis.ipynb` covers:
 
-## Tools
+1. Business question, experimental design, primary metric, and guardrails.
+2. Sample-size estimation for a two-sided two-proportion test.
+3. Reproducible user-level synthetic data generation.
+4. Data-quality assertions and allocation checks.
+5. Conversion, absolute lift, relative lift, and denominators.
+6. Two-proportion z-test, Wilson confidence intervals, and a confidence interval for the difference.
+7. Pearson chi-square test as a cross-check.
+8. Bootstrap confidence interval for absolute conversion lift.
+9. Guardrail analysis for error rate and completion time.
+10. A transparent, illustrative decision rule and limitations.
 
-- Python
-- pandas and NumPy
-- SciPy
-- statsmodels
-- Jupyter Notebook
-- Matplotlib
-
-## Planned Project Structure
+## Repository structure
 
 ```text
 fintech-ab-testing/
 ├── README.md
 ├── requirements.txt
+├── .gitignore
 ├── notebooks/
-│   └── fintech_ab_test.ipynb
+│   └── ab_test_analysis.ipynb
 ├── data/
 │   └── README.md
 └── reports/
     └── README.md
 ```
 
-The notebook and supporting files will be added after the initial project specification is reviewed.
+## How to run locally
 
-## How to Run
+Use Python 3.10 or newer.
 
-Run instructions and dependencies will be added with the first runnable notebook. The intended workflow is to install the listed Python dependencies and execute the notebook from top to bottom.
+```bash
+git clone https://github.com/VladislavTolmachev/fintech-ab-testing.git
+cd fintech-ab-testing
+git switch feature/experiment-analysis
+python -m venv .venv
+```
 
-## Interpretation Principles
+Activate the environment:
+
+- **Windows PowerShell:** `.venv\\Scripts\\Activate.ps1`
+- **Windows Command Prompt:** `.venv\\Scripts\\activate.bat`
+- **macOS/Linux:** `source .venv/bin/activate`
+
+Then install dependencies and launch Jupyter:
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+jupyter notebook
+```
+
+Open `notebooks/ab_test_analysis.ipynb` and use **Kernel → Restart Kernel and Run All Cells**. The notebook has no saved outputs by design; execute it to generate results. The fixed random seed makes the simulation reproducible in the same compatible software environment.
+
+## Interpretation principles
 
 - Statistical significance is not the same as business significance.
-- A non-significant result does not prove that the variants are equivalent.
-- Sample size, experiment duration, and stopping rules should be defined before evaluating outcomes.
+- A non-significant result does not prove that variants are equivalent.
+- Sample size, experiment duration, stopping rules, and guardrail thresholds should be defined before evaluating outcomes.
 - Sample-ratio mismatch, missing outcomes, and instrumentation problems should be investigated before interpreting treatment effects.
-- Guardrails and implementation costs matter alongside the primary metric.
+- Completion time is conditional on completion and may be affected by changes in who completes the flow.
+- Secondary metrics should not be overinterpreted without a plan for multiple comparisons.
 - Synthetic data demonstrates an analysis workflow; it cannot establish the effect of a real product change.
 
 ## Limitations
 
-This is a portfolio case study, not a production experimentation platform. The analysis will depend on stated simulation and statistical assumptions. A real experiment would require validated exposure logging, a representative eligible population, a pre-defined stopping rule, instrumentation QA, privacy review, and assessment of operational and business risks.
+This is a portfolio case study, not a production experimentation platform. The treatment effect is built into the simulation, so the resulting analysis is a demonstration rather than independent evidence. A real experiment would require validated exposure logging, a representative eligible population, a pre-defined stopping rule, instrumentation QA, sample-ratio checks, privacy review, and assessment of operational and business risks.
 
-## Project Status
+## Project status
 
-- [x] Repository created
-- [x] Initial experiment specification documented
-- [ ] Implement reproducible synthetic data generation
-- [ ] Complete statistical analysis notebook
-- [ ] Validate calculations and conclusions
-- [ ] Add final charts and an evidence-based product recommendation
+- [x] Initial experiment specification
+- [x] Reproducible synthetic-data notebook
+- [x] Sample-size planning and primary statistical tests
+- [x] Bootstrap and guardrail analysis
+- [ ] Execute all cells in a clean local environment
+- [ ] Review calculations and interpretation independently
+- [ ] Incorporate review findings before merging to `main`
