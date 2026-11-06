@@ -14,7 +14,7 @@ A fintech product team is considering removing an optional step from its virtual
 - **Treatment (B):** simplified application flow.
 - **Unit of randomization:** user.
 - **Primary metric:** application completion conversion rate among all randomized users.
-- **Guardrail metrics:** application error rate and completion time among users who complete the application.
+- **Guardrail metrics:** application error rate (checked with a non-inferiority margin and one-sided upper confidence bound) and completion time among users who complete the application.
 
 ## Hypotheses and planning assumptions
 
@@ -41,7 +41,7 @@ The notebook `notebooks/ab_test_analysis.ipynb` covers:
 6. Two-proportion z-test, Wilson confidence intervals, and a confidence interval for the difference.
 7. Pearson chi-square test as a cross-check.
 8. Bootstrap confidence interval for absolute conversion lift.
-9. Guardrail analysis for error rate and completion time.
+9. Error-rate non-inferiority analysis using a score confidence interval and one-sided 95% upper bound; Welch's t-test for completion time among completers.
 10. A transparent, illustrative decision rule and limitations.
 
 ## Repository structure
