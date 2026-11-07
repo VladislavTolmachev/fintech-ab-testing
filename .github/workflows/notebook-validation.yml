@@ -45,6 +45,7 @@ jobs:
             --to notebook \
             --execute notebooks/ab_test_analysis.ipynb \
             --output executed_ab_test_analysis.ipynb \
+            --output-dir . \
             --ExecutePreprocessor.timeout=300
 
       - name: Verify notebook execution output exists
