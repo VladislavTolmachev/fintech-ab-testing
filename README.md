@@ -36,13 +36,13 @@ The notebook `notebooks/ab_test_analysis.ipynb` covers:
 1. Business question, experimental design, primary metric, and guardrails.
 2. Sample-size estimation for a two-sided two-proportion test.
 3. Reproducible user-level synthetic data generation.
-4. Data-quality assertions and allocation checks.
+4. Data-quality assertions and a sample-ratio-mismatch (SRM) diagnostic; an SRM alert blocks the product decision pending investigation.
 5. Conversion, absolute lift, relative lift, and denominators.
-6. Two-proportion z-test, Wilson confidence intervals, and a confidence interval for the difference.
-7. Pearson chi-square test as a cross-check.
+6. Two-proportion z-test, Wilson intervals for each arm, and 95%/90% Newcombe score intervals for the treatment-control difference.
+7. Pearson chi-square test as a cross-check of the primary two-proportion test.
 8. Bootstrap confidence interval for absolute conversion lift.
 9. Error-rate non-inferiority analysis using a score confidence interval and one-sided 95% upper bound; Welch's t-test for completion time among completers.
-10. A transparent, illustrative decision rule and limitations.
+10. A transparent decision rule combining statistical significance, a one-sided 95% Newcombe lower bound against an illustrative +1 pp practical-effect threshold, and an error-rate non-inferiority guardrail.
 
 ## Repository structure
 
@@ -105,7 +105,8 @@ This is a portfolio case study, not a production experimentation platform. The t
 - [x] Initial experiment specification
 - [x] Reproducible synthetic-data notebook
 - [x] Sample-size planning and primary statistical tests
+- [x] Newcombe confidence intervals and practical-effect assessment
 - [x] Bootstrap and guardrail analysis
-- [ ] Execute all cells in a clean local environment
-- [ ] Review calculations and interpretation independently
-- [ ] Incorporate review findings before merging to `main`
+- [x] SRM-gated product recommendation
+- [ ] Execute all cells in a clean local environment after the final edits
+- [ ] Complete final independent review before merging to `main`
