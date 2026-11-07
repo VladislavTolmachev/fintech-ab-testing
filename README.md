@@ -2,6 +2,8 @@
 
 An end-to-end **product analytics** case study evaluating whether a simplified virtual-card application flow improves completion conversion.
 
+![Notebook validation](https://github.com/VladislavTolmachev/fintech-ab-testing/actions/workflows/notebook-validation.yml/badge.svg)
+
 This portfolio project uses synthetic educational data only. It contains no real customer or company data, and its results must not be interpreted as evidence about a real fintech product.
 
 ## Business Problem
